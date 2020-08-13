@@ -15,8 +15,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
+from .views import validate_jwt_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    #토큰 발행
+    path('login/', obtain_jwt_token),
+    
+    #토큰이 유효한지 검증
+    path('validate/', validate_jwt_token),
+    path('verify/', verify_jwt_token),
+
+    #토큰 갱신
+    path('refresh/', refresh_jwt_token),
+    
+
+    path('user/', include('user.urls')),
     path('api/', include('post.urls')),
 ]
