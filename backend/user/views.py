@@ -1,28 +1,27 @@
 from django.shortcuts import render
-#from django.core import serializers
-#from django.http import HttpResponse
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-from rest_framework.response import Response
-from .serializers import UserSerializer
-
+from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
-
+from rest_framework import permissions, status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializers import UserSerializer, UserSerializerWithToken
 
 
 @api_view(['GET'])
-#@permission_classes((IsAuthenticated, ))
-#@authentication_classes((JSONWebTokenAuthentication,))
 def current_user(request):
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
 
-""" @api_view(['GET'])
-    @permission_classes((IsAuthenticated, ))
-    @authentication_classes((JSONWebTokenAuthentication,))
-    def posts(request):
-    posts = Post.objects.filter(
-        published_at__isnull=False).order_by('-published_at')
-    post_list = serializers.serialize('json', posts)
-    return HttpResponse(post_list, content_type="text/json-comment-filtered") """
+
+# 회원가입
+class UserList(APIView):
+
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        serializer = UserSerializerWithToken(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

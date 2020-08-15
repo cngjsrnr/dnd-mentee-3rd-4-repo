@@ -7,29 +7,6 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from .models import Post
 
-""" @api_view(['GET'])
-#@permission_classes((IsAuthenticated, ))
-#@authentication_classes((JSONWebTokenAuthentication,))
-def Authpost(request):
-    pt=Post.objects.all()
-    serializer=PostSerializer(pt);
-    return Response(serializer.data)
-
-
-class ListPost(generics.ListCreateAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-
-    def get(self,request,format=None):
-        pt=Post.objects.all()
-        serializer=PostSerializer(pt)
-        return Response(serializer.data) 
-
-
-
-class DetailPost(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer """
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated, ))
