@@ -6,13 +6,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from .models import Post
-
+from .serializers import PostSerializer
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated, ))
-@authentication_classes((JSONWebTokenAuthentication,))
+# @permission_classes((IsAuthenticated, ))
+# @authentication_classes((JSONWebTokenAuthentication,))
 def posts(request):
-    posts = Post.objects.filter(
-        published_at__isnull=False).order_by('-published_at')
+    posts = Post.objects.all()
     post_list = serializers.serialize('json', posts)
     return HttpResponse(post_list, content_type="text/json-comment-filtered")
+    

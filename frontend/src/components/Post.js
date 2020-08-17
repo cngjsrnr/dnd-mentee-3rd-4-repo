@@ -17,7 +17,7 @@ class App extends Component {
       })
         .then((res) => res.json())
         .then((json) => {
-          console.log("posts: " + json);
+          console.log("posts: " + json.title);
           this.setState({
             posts: json,
           });

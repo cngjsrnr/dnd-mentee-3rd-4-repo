@@ -10,6 +10,7 @@ class App extends Component {
 
     this.state = {
       username: null,
+      email: null,
       isAuthenticated: localStorage.getItem("token") ? true : false,
     };
   }
@@ -27,7 +28,7 @@ class App extends Component {
 
       // 현재 JWT 토큰 값이 타당한지 GET /validate 요청을 통해 확인하고
       // 상태 코드가 200이라면 현재 GET /user/current 요청을 통해 user정보를 받아옴
-      fetch("http://localhost:8000/validate/", {
+      fetch("http://localhost:8000/user/validate/", {
         headers: {
           Authorization: `JWT ${localStorage.getItem("token")}`,
         },
@@ -45,9 +46,12 @@ class App extends Component {
               if (json.username) {
                 this.setState({ username: json.username });
               }
+              if (json.username) {
+                this.setState({ email: json.email });
+              }
 
               // Refresh Token 발급 받아 token의 만료 시간 연장
-              fetch("http://localhost:8000/refresh/", {
+              fetch("http://localhost:8000/user/refresh/", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -61,6 +65,7 @@ class App extends Component {
                 .then((json) => {
                   this.userHasAuthenticated(
                     true,
+                    json.email,
                     json.user.username,
                     json.token
                   );
@@ -83,10 +88,11 @@ class App extends Component {
   }
 
   // 새로운 User가 로그인 했다면 (서버로 부터 access token을 발급받았을 것이고) 해당 토큰을 localStorage에 저장
-  userHasAuthenticated = (authenticated, username, token) => {
+  userHasAuthenticated = (authenticated, email, username, token) => {
     this.setState({
       isAuthenticated: authenticated,
       username: username,
+      email: email,
     });
     localStorage.setItem("token", token);
   };
@@ -97,16 +103,20 @@ class App extends Component {
       this.setState({
         isAuthenticated: false,
         username: "",
+        email:"",
       });
       localStorage.removeItem("token");
       console.log("Logged out successfully");
+      alert("성공적으로 로그아웃되었습니다");
     } catch {
       this.setState({
         isAuthenticated: false,
         username: "",
+        email: "",
       });
       localStorage.removeItem("token");
       console.log("Logged out successfully");
+      alert("성공적으로 로그아웃되었습니다");
     }
   };
 
@@ -135,7 +145,7 @@ class App extends Component {
 
     return (
       <div>
-        {lists} 
+        {lists}
         <Post token={localStorage.getItem("token")}></Post>
       </div>
     );
