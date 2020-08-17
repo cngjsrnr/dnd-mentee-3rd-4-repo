@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'post',
-    'user.apps.UserConfig',
+    'user',
 
     'rest_framework',
     'corsheaders',
@@ -80,8 +80,8 @@ JWT_AUTH = {
     'JWT_ALGORITHM': 'HS256',
     'JWT_VERIFY_EXPIRATION': True,
     'JWT_ALLOW_REFRESH': True,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=10),
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(hours=1),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=30),
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(hours=3),
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'djangoreactapi.custom_responses.my_jwt_response_handler'
 }
 

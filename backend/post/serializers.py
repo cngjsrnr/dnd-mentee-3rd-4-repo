@@ -7,5 +7,8 @@ class PostSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'content',
+            'category',
+            'newslink',
+            'keyword',
         )
         model = Post

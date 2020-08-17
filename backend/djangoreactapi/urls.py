@@ -22,14 +22,14 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     #토큰 발행
-    path('login/', obtain_jwt_token),
+    path('user/login/', obtain_jwt_token),
     
     #토큰이 유효한지 검증
-    path('validate/', validate_jwt_token),
-    path('verify/', verify_jwt_token),
+    path('user/validate/', validate_jwt_token),
+    #path('verify/', verify_jwt_token),
 
     #토큰 갱신
-    path('refresh/', refresh_jwt_token),
+    path('user/refresh/', refresh_jwt_token),
     
 
     path('user/', include('user.urls'),),

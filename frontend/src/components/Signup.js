@@ -6,11 +6,10 @@ export default class Signup extends Component {
     super(props);
 
     this.state = {
-      username: "",
+      email: "",
       password1: "",
       password2: "",
-      first_name:"",
-      email:"",
+      username:"",
     };
   }
 
@@ -33,11 +32,10 @@ export default class Signup extends Component {
 
   handleSubmit = (submitEvent) => {
     let data = {
-      username: this.state.username,
+      email:this.state.email,
       password: this.state.password1,
       password2: this.state.password2,
-      first_name:this.state.first_name,
-      email:this.state.email,
+      username: this.state.username,
     };
     submitEvent.preventDefault();
     
@@ -61,7 +59,7 @@ export default class Signup extends Component {
       .then((res) => res.json())
       .then((json) => {
         if (json.username && json.token) {
-          //this.props.userHasAuthenticated(true, json.username, json.token);
+          //this.props.userHasAuthenticated(true,json.email, json.username, json.token);
           //회원가임후 메일 인증해야되니까 메일 인증하라고 알람 띄움
           alert("메일인증후에 서비스 이용이 가능합니다");
         }
@@ -74,8 +72,8 @@ export default class Signup extends Component {
       <div className="Signup">
         회원가입 페이지 입니다. <br />
         <form onSubmit={this.handleSubmit}>
-        아이디:
-          <input type="text" name="username" onChange={this.handleChange} />
+        이메일:
+          <input type="email" name="email" onChange={this.handleChange} />
           <br />
           비밀번호:
           <input type="password" name="password1" onChange={this.handleChange} />
@@ -84,11 +82,9 @@ export default class Signup extends Component {
           <input type="password" name="password2" onChange={this.handleChange} />
           <br />
           닉네임:
-          <input type="text" name="first_name" onChange={this.handleChange} />
+          <input type="text" name="username" onChange={this.handleChange} />
           <br />
-          이메일:
-          <input type="email" name="email" onChange={this.handleChange} />
-          <br />
+          
           
           <button type="submit">확인</button>
         </form>
