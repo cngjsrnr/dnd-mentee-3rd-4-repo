@@ -32,6 +32,6 @@ urlpatterns = [
     path('refresh/', refresh_jwt_token),
     
 
-    path('user/', include('user.urls')),
+    path('user/', include('user.urls'),),
     path('api/', include('post.urls')),
 ]

@@ -135,7 +135,7 @@ class App extends Component {
 
     return (
       <div>
-        {lists} 
+        {lists}
         <Post token={localStorage.getItem("token")}></Post>
       </div>
     );

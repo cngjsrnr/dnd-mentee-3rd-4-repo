@@ -7,7 +7,8 @@ export default class Signup extends Component {
 
     this.state = {
       username: "",
-      password: "",
+      password1: "",
+      password2: "",
       first_name:"",
       email:"",
     };
@@ -33,7 +34,8 @@ export default class Signup extends Component {
   handleSubmit = (submitEvent) => {
     let data = {
       username: this.state.username,
-      password: this.state.password,
+      password: this.state.password1,
+      password2: this.state.password2,
       first_name:this.state.first_name,
       email:this.state.email,
     };
@@ -48,7 +50,7 @@ export default class Signup extends Component {
       return response;
     };
 
-    fetch("http://localhost:8000/user/", {
+    fetch("http://localhost:8000/user/signup/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -59,9 +61,9 @@ export default class Signup extends Component {
       .then((res) => res.json())
       .then((json) => {
         if (json.username && json.token) {
-          this.props.userHasAuthenticated(true, json.username, json.token);
-          //로그인이 되있으면 뉴스보여주는 페이지로 이동
-          //뉴스 보여주는 페이지로 이동코드 적어주세요
+          //this.props.userHasAuthenticated(true, json.username, json.token);
+          //회원가임후 메일 인증해야되니까 메일 인증하라고 알람 띄움
+          alert("메일인증후에 서비스 이용이 가능합니다");
         }
       })
       .catch((error) => alert(error));
@@ -76,7 +78,10 @@ export default class Signup extends Component {
           <input type="text" name="username" onChange={this.handleChange} />
           <br />
           비밀번호:
-          <input type="password" name="password" onChange={this.handleChange} />
+          <input type="password" name="password1" onChange={this.handleChange} />
+          <br />
+          비밀번호 확인:
+          <input type="password" name="password2" onChange={this.handleChange} />
           <br />
           닉네임:
           <input type="text" name="first_name" onChange={this.handleChange} />
