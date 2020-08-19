@@ -43,7 +43,7 @@ export default class Signup extends Component {
 
     let handleErrors = (response) => {
       if (!response.ok) {
-        throw Error(response.statusText);
+        throw response;
       }
       return response;
     };
@@ -58,13 +58,20 @@ export default class Signup extends Component {
       .then(handleErrors)
       .then((res) => res.json())
       .then((json) => {
+        console.log("1");
         if (json.username && json.token) {
+          console.log("2");
           //this.props.userHasAuthenticated(true,json.email, json.username, json.token);
           //회원가임후 메일 인증해야되니까 메일 인증하라고 알람 띄움
           alert("메일인증후에 서비스 이용이 가능합니다");
+          
+        }else{
+          console.log("3");
+          alert(json)
         }
+        console.log("4");
       })
-      .catch((error) => alert(error));
+      .catch((error) => {})      
   };
 
   render() {

@@ -2,16 +2,14 @@ import jwt
 from djangoreactapi.settings import get_secret
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
-#from django.contrib.auth.models import User
 from .models import User
 from django.core.exceptions import ValidationError
+from pytz import timezone
+from datetime import datetime, timedelta
 
-# SMTP 관련 인증
-from django.contrib.sites.shortcuts import get_current_site
+# SMTP
 from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_encode
 from django.core.mail import EmailMessage
-from django.utils.encoding import force_bytes
 from .tokens import account_activation_token
 
 
@@ -37,8 +35,9 @@ class UserSerializerWithToken(serializers.ModelSerializer):
 
     def validate_email(self, value):
         if(User.objects.filter(email=value).exists()):
+            
             raise serializers.ValidationError("이미 존재하는 이메일 입니다")
-        print("suc1")
+        
         return value
 
     def validate_username(self, value):
@@ -46,13 +45,13 @@ class UserSerializerWithToken(serializers.ModelSerializer):
             raise serializers.ValidationError("닉네임은 2글자이상 15글자 이하로 작성해주세요")
         if(User.objects.filter(first_name=value).exists()):
             raise serializers.ValidationError("이미 존재하는 닉네임입니다")
-        print("suc2")
+        
         return value
 
     def validate_password(self, value):
         if(len(value) < 8):
             raise serializers.ValidationError("비밀번호를 8이상으로 입력해주세요")
-        print("suc3")
+        
         return value
 
 
@@ -65,17 +64,21 @@ class UserSerializerWithToken(serializers.ModelSerializer):
 
         instance.is_active = False
         instance.save()
-        print(instance.__dict__)
-        # current_site=get_current_site(self.context['request'])
+        
+        token=jwt.encode({
+            'pk': instance.pk,
+            'exp': datetime.now(timezone('Asia/Seoul')) + timedelta(minutes=10)
+            },get_secret("SECRET_KEY"),algorithm='HS256').decode('utf-8')
+
         message = render_to_string('user/email_confirm.html', {
             'user': instance.username, 'domain': "localhost:8000",
-            'uid':  jwt.encode({'pk': instance.pk},get_secret("SECRET_KEY"),algorithm='HS256').decode('utf-8'),
-            'token': account_activation_token.make_token(instance),
+            'token':token,
         })
 
         mail_subject = '계정을 활성화 해주세요'
         to_email = validated_data['email']
         email = EmailMessage(mail_subject, message, to=[to_email])
+        
         email.send()
 
         return instance
@@ -83,3 +86,4 @@ class UserSerializerWithToken(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('token', 'username', 'email', 'password')
+
