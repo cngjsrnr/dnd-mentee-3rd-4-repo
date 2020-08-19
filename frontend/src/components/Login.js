@@ -69,12 +69,10 @@ export default class Login extends Component {
           alert("로그인 성공");
         }
       })
-      .catch((error) =>
-        alert(
-          " 로그인을 실패했습니다\n ID또는 PW를 확인해주세요\n 내용(배포시 지워주세요):" +
-            error
-        )
-      );
+      .catch((error) =>{
+        alert(" 로그인을 실패했습니다\n ID또는 PW를 확인해주세요");
+        console.log(error);
+      });
   };
 
   render() {
