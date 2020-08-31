@@ -82,7 +82,7 @@ export default class Signup extends Component {
         이메일:
           <input type="email" name="email" onChange={this.handleChange} />
           <br />
-          비밀번호:
+          비밀번호(8자리 이상):
           <input type="password" name="password1" onChange={this.handleChange} />
           <br />
           비밀번호 확인:
