@@ -36,7 +36,7 @@ class App extends Component {
       lists.push(
         <div key={data[i].pk}>
           <h1>{data[i].fields.title}</h1>
-          <span>{data[i].fields.content}</span>
+          {/* <span>{data[i].fields.content}</span> */}
         </div>
       );
 
